@@ -1,8 +1,11 @@
 import java.io.*;
 import java.nio.file.*;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Scanner;
 
 public class Main {
@@ -11,18 +14,20 @@ public class Main {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
         while (true) {
-            System.out.println("Список действий:\n1. Добавить запись\n2. Список записей\n0. Выход\nВведите номер действия:");
+            System.out.println("Список действий:\n1. Добавить запись\n2. Список записей\n3. Статистика\n0. Выход\nВведите номер действия:");
             int choice = scanner.nextInt();
             scanner.nextLine();
             if (choice == 1) {
                 addNote(scanner);
             } else if (choice == 2) {
                 readNotes();
+            } else if (choice == 3) {
+                showStatistics();
             } else if (choice == 0) {
                 System.out.println("Завершение работы...");
                 break;
             } else {
-                System.out.println("Пожалуйста, введите 1, 2 или 0.");
+                System.out.println("Пожалуйста, введите 1, 2, 3 или 0.");
             }
         }
     }
@@ -50,6 +55,22 @@ public class Main {
                     System.out.println(line);
                 }
 
+        } catch (IOException e) {
+            System.err.println("Ошибка при чтении файла: " + e.getMessage());
+        }
+    }
+
+    public static void showStatistics() {
+        try {
+            List<String> lines = Files.readAllLines(Paths.get(FILE_NAME));
+            int notesCount = lines.size();
+            int symbolsCount = 0;
+            for (String line : lines) {
+                symbolsCount += line.length();
+            }
+            System.out.println("Статистика:");
+            System.out.println("Количество записей: " + notesCount);
+            System.out.println("Количество символов: " + symbolsCount);
         } catch (IOException e) {
             System.err.println("Ошибка при чтении файла: " + e.getMessage());
         }
