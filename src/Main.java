@@ -3,10 +3,9 @@ import java.nio.file.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Scanner;
+import java.util.*;
+import java.util.Collections;
+
 
 public class Main {
     public static final String FILE_NAME = "notes.csv";
@@ -65,14 +64,25 @@ public class Main {
             List<String> lines = Files.readAllLines(Paths.get(FILE_NAME));
             int notesCount = lines.size();
             int symbolsCount = 0;
+            Map<LocalDate, Integer> notesPerDay = new HashMap<>();
+
             for (String line : lines) {
-                symbolsCount += line.length();
+                String[] parts = line.split(",", 2);
+                symbolsCount += parts[1].trim().length();
+
+                LocalDateTime dateTime = LocalDateTime.parse(parts[0], DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm:ss"));
+                LocalDate date = dateTime.toLocalDate();
+                notesPerDay.put(date, notesPerDay.getOrDefault(date, 0) + 1);
             }
+
             System.out.println("Статистика:");
             System.out.println("Количество записей: " + notesCount);
-            System.out.println("Количество символов: " + symbolsCount);
+            System.out.println("Общее количество символов в записях: " + symbolsCount);
+            System.out.println("Самый активный день: " + Collections.max(notesPerDay.entrySet(), Map.Entry.comparingByValue()).getKey().format(DateTimeFormatter.ofPattern("dd.MM.yyyy")));
+
         } catch (IOException e) {
             System.err.println("Ошибка при чтении файла: " + e.getMessage());
         }
+
     }
 }
