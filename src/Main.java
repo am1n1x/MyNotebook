@@ -16,19 +16,24 @@ public class Main {
             System.out.println("Список действий:\n1. Добавить запись\n2. Список записей\n3. Статистика\n4. Поиск записей\n0. Выход\nВведите номер действия:");
             int choice = scanner.nextInt();
             scanner.nextLine();
-            if (choice == 1) {
-                addNote(scanner);
-            } else if (choice == 2) {
-                readNotes();
-            } else if (choice == 3) {
-                showStatistics();
-            } else if (choice == 4) {
-                findNote(scanner);
-            } else if (choice == 0) {
-                System.out.println("Завершение работы...");
-                break;
-            } else {
-                System.out.println("Пожалуйста, введите 1, 2, 3, 4 или 0.");
+            switch (choice) {
+                case 1:
+                    addNote(scanner);
+                    break;
+                case 2:
+                    readNotes();
+                    break;
+                case 3:
+                    showStatistics();
+                    break;
+                case 4:
+                    findNote(scanner);
+                    break;
+                case 0:
+                    System.out.println("Завершение работы...");
+                    return;
+                default:
+                    System.out.println("Пожалуйста, введите 1, 2, 3, 4 или 0.");
             }
         }
     }
@@ -70,7 +75,7 @@ public class Main {
 
             for (String line : lines) {
                 String[] parts = line.split(",", 2);
-                symbolsCount += parts[1].trim().length();               // Считает символы  только в тексте заметки ( символы даты и времени не учитываются)
+                symbolsCount += parts[1].trim().length();               // Считает символы  только в тексте заметки (символы даты и времени не учитываются)
 
                 LocalDateTime dateTime = LocalDateTime.parse(parts[0], DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm:ss"));
                 LocalDate date = dateTime.toLocalDate();
@@ -92,19 +97,22 @@ public class Main {
             System.out.println("Список действий:\n1. Поиск по дате\n2. Поиск по заметкам\n0. Назад\nВведите номер действия:");
             int choice = scanner.nextInt();
             scanner.nextLine();
-            if (choice == 1) {
-                findByDate(scanner);
-            } else if (choice == 2) {
-                findByWord(scanner);
-            } else if (choice == 0) {
-                break;
-            } else {
-                System.out.println("Пожалуйста, введите 1, 2 или 0.");
+            switch (choice) {
+                case 1:
+                    findByDate(scanner);
+                    break;
+                case 2:
+                    findByWord(scanner);
+                    break;
+                case 0:
+                    return;
+                default:
+                    System.out.println("Пожалуйста, введите 1, 2 или 0.");
             }
         }
     }
 
-    private static void findByDate(Scanner scanner) {                                           // Ищет только по дате, а не наличию даты в тексте заметки
+    private static void findByDate(Scanner scanner) {                                     // Ищет только по дате, а не наличию даты в тексте заметки
         System.out.println("Введите дату в формате dd.MM.yyyy:");
         String date = scanner.nextLine();
         try {
