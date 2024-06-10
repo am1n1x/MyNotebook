@@ -23,7 +23,7 @@ public class Main {
             } else if (choice == 3) {
                 showStatistics();
             } else if (choice == 4) {
-                findNote();
+                findNote(scanner);
             } else if (choice == 0) {
                 System.out.println("Завершение работы...");
                 break;
@@ -87,16 +87,15 @@ public class Main {
         }
     }
 
-    public static void findNote() {
-        Scanner scanner = new Scanner(System.in);
+    public static void findNote(Scanner scanner) {
         while (true) {
             System.out.println("Список действий:\n1. Поиск по дате\n2. Поиск по заметкам\n0. Назад\nВведите номер действия:");
             int choice = scanner.nextInt();
             scanner.nextLine();
             if (choice == 1) {
-                findByDate();
+                findByDate(scanner);
             } else if (choice == 2) {
-                findByWord();
+                findByWord(scanner);
             } else if (choice == 0) {
                 break;
             } else {
@@ -105,8 +104,7 @@ public class Main {
         }
     }
 
-    private static void findByDate() {                                           // Ищет только по дате, а не наличию даты в тексте заметки
-        Scanner scanner = new Scanner(System.in); //?
+    private static void findByDate(Scanner scanner) {                                           // Ищет только по дате, а не наличию даты в тексте заметки
         System.out.println("Введите дату в формате dd.MM.yyyy:");
         String date = scanner.nextLine();
         try {
@@ -123,8 +121,7 @@ public class Main {
         }
     }
 
-    private static void findByWord() {                                   // Ищет по наличию конкретных символов/слов в тексте заметок
-        Scanner scanner = new Scanner(System.in);//?
+    private static void findByWord(Scanner scanner) {                                   // Ищет по наличию конкретных символов/слов в тексте заметок
         System.out.println("Введите слово для поиска:");
         String word = scanner.nextLine();
         try {
