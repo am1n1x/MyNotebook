@@ -129,7 +129,7 @@ public class Main {
         }
     }
 
-    private static void findByWord(Scanner scanner) {                                   // Ищет по наличию конкретных символов/слов в тексте заметок
+    private static void findByWord(Scanner scanner) {                                   // Ищет по наличию символов/слов в тексте заметок
         System.out.println("Введите слово для поиска:");
         String word = scanner.nextLine();
         try {
