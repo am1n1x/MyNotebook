@@ -13,7 +13,7 @@ public class Main {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
         while (true) {
-            System.out.println("Список действий:\n1. Добавить запись\n2. Список записей\n3. Статистика\n0. Выход\nВведите номер действия:");
+            System.out.println("Список действий:\n1. Добавить запись\n2. Список записей\n3. Статистика\n4. Поиск записей\n0. Выход\nВведите номер действия:");
             int choice = scanner.nextInt();
             scanner.nextLine();
             if (choice == 1) {
@@ -22,11 +22,13 @@ public class Main {
                 readNotes();
             } else if (choice == 3) {
                 showStatistics();
+            } else if (choice == 4) {
+                findNote();
             } else if (choice == 0) {
                 System.out.println("Завершение работы...");
                 break;
             } else {
-                System.out.println("Пожалуйста, введите 1, 2, 3 или 0.");
+                System.out.println("Пожалуйста, введите 1, 2, 3, 4 или 0.");
             }
         }
     }
@@ -68,7 +70,7 @@ public class Main {
 
             for (String line : lines) {
                 String[] parts = line.split(",", 2);
-                symbolsCount += parts[1].trim().length();
+                symbolsCount += parts[1].trim().length();               // Считает символы  только в тексте заметки ( символы даты и времени не учитываются)
 
                 LocalDateTime dateTime = LocalDateTime.parse(parts[0], DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm:ss"));
                 LocalDate date = dateTime.toLocalDate();
@@ -83,6 +85,59 @@ public class Main {
         } catch (IOException e) {
             System.err.println("Ошибка при чтении файла: " + e.getMessage());
         }
+    }
 
+    public static void findNote() {
+        Scanner scanner = new Scanner(System.in);
+        while (true) {
+            System.out.println("Список действий:\n1. Поиск по дате\n2. Поиск по заметкам\n0. Назад\nВведите номер действия:");
+            int choice = scanner.nextInt();
+            scanner.nextLine();
+            if (choice == 1) {
+                findByDate();
+            } else if (choice == 2) {
+                findByWord();
+            } else if (choice == 0) {
+                break;
+            } else {
+                System.out.println("Пожалуйста, введите 1, 2 или 0.");
+            }
+        }
+    }
+
+    private static void findByDate() {                                           // Ищет только по дате, а не наличию даты в тексте заметки
+        Scanner scanner = new Scanner(System.in); //?
+        System.out.println("Введите дату в формате dd.MM.yyyy:");
+        String date = scanner.nextLine();
+        try {
+            List<String> lines = Files.readAllLines(Paths.get(FILE_NAME));
+            System.out.println("Записи за " + date + ":");
+            for (String line : lines) {
+                String[] parts = line.split(",", 2);
+                if (parts[0].contains(date)) {
+                    System.out.println(line);
+                }
+            }
+        } catch (IOException e) {
+            System.err.println("Ошибка при чтении файла: " + e.getMessage());
+        }
+    }
+
+    private static void findByWord() {                                   // Ищет по наличию конкретных символов/слов в тексте заметок
+        Scanner scanner = new Scanner(System.in);//?
+        System.out.println("Введите слово для поиска:");
+        String word = scanner.nextLine();
+        try {
+            List<String> lines = Files.readAllLines(Paths.get(FILE_NAME));
+            System.out.println("Записи, содержащие слово " + word + ":");
+            for (String line : lines) {
+                String[] parts = line.split(",", 2);
+                if (parts[1].contains(word)) {
+                    System.out.println(line);
+                }
+            }
+        } catch (IOException e) {
+            System.err.println("Ошибка при чтении файла: " + e.getMessage());
+        }
     }
 }
